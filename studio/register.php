@@ -2,6 +2,11 @@
 /* Registration process, inserts user info into the database 
    and sends account confirmation email message
  */
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once 'vendor/autoload.php';
 
 // Set session variables to be used on profile.php page
 $_SESSION['email'] = $_POST['email'];
@@ -42,19 +47,31 @@ else { // Email doesn't already exist in a database, proceed...
                  your account by clicking on the link in the message!";
 
         // Send registration confirmation link (verify.php)
-        $to      = $email;
-        $subject = 'Account Verification ( iCare )'; // ( clevertechie.com)
-        $message_body = '
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.googlemail.com';  //gmail SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'tifuphmedic2015@gmail.com';   //username
+        $mail->Password = 'informatics2015';   //password
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;                    //SMTP port
+        $mail->setFrom('tifuphmedic2015@gmail.com', 'donotreply-ihealth');
+        $mail->addAddress($email, $first_name);
+
+       // $to      = $email;
+        $mail->Subject = 'Account Verification ( iCare )'; // ( clevertechie.com)
+        $mail->Body = '
         Hello '.$first_name.',
 
         Thank you for signing up!
 
         Please click this link to activate your account:
 
-        http://localhost/login-system/verify.php?email='.$email.'&hash='.$hash;  
+        http://'.$_SERVER['HTTP_HOST'].'/studio/verify.php?email='.$email.'&hash='.$hash;  
 
-        mail( $to, $subject, $message_body );
-
+        //mail( $to, $subject, $message_body );
+        $mail->send();
+        
         header("location: profile.php"); 
 
     }

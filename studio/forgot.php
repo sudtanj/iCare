@@ -1,6 +1,10 @@
 <?php 
 /* Reset your password form, sends reset.php password link */
 require 'db.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once 'vendor/autoload.php';
 session_start();
 
 // Check if form submitted with method="post"
@@ -26,20 +30,31 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
         $_SESSION['message'] = "<p>Please check your email <span>$email</span>"
         . " for a confirmation link to complete your password reset!</p>";
 
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.googlemail.com';  //gmail SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'tifuphmedic2015@gmail.com';   //username
+        $mail->Password = 'informatics2015';   //password
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;                    //SMTP port
+        $mail->setFrom('tifuphmedic2015@gmail.com', 'donotreply-ihealth');
+        $mail->addAddress($email, $first_name);
+      
         // Send registration confirmation link (reset.php)
-        $to      = $email;
-        $subject = 'Password Reset Link ( clevertechie.com )';
-        $message_body = '
+        //$to      = $email;
+        $mail->Subject = 'Password Reset Link ( clevertechie.com )';
+        $mail->Body = '
         Hello '.$first_name.',
 
         You have requested password reset!
 
         Please click this link to reset your password:
 
-        http://localhost/login-system/reset.php?email='.$email.'&hash='.$hash;  
+        http://'.$_SERVER['HTTP_HOST'].'/studio/reset.php?email='.$email.'&hash='.$hash;  
 
-        mail($to, $subject, $message_body);
-
+        //mail($to, $subject, $message_body);
+        $mail->send();
         header("location: success.php");
   }
 }
