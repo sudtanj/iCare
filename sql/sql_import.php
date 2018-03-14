@@ -31,4 +31,6 @@ CREATE TABLE `accounts`.`users`
 PRIMARY KEY (`id`) 
 );') or die($mysqli->error);
 
+header('Location: '.$_SERVER['REQUEST_URI'].'/index.php');
+exit();
 ?>

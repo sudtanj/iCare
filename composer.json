@@ -1,5 +1,13 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "http://github.com/noetix/Simple-ORM.git"
+        }
+    ],
     "require": {
-        "phpmailer/phpmailer": "~6.0"
+        "phpmailer/phpmailer": "~6.0",
+         "noetix/simple-orm": "dev-master",
+        "bocharsky-bw/arrayzy": "^0.6.1"
     }
 }

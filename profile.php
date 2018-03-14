@@ -15,14 +15,9 @@ else {
     $active = $_SESSION['active'];
 }
 ?>
-<!DOCTYPE html>
-<html >
-<head>
-  <meta charset="UTF-8">
-  <title>Welcome <?= $first_name.' '.$last_name ?></title>
-  <?php include 'css/css.html'; ?>
-</head>
-
+<?php
+include 'head.php'
+?>
 <body>
   <div class="form">
 
@@ -42,7 +37,9 @@ else {
           
           ?>
           </p>
-          
+          <h2><?php echo $first_name.' '.$last_name; ?></h2>
+          <p><?= $email ?></p>
+          <p>Please select what you want to do below: </p>
           <?php
           
           // Keep reminding the user this account is not active, until they activate
@@ -52,13 +49,13 @@ else {
               Account is unverified, please confirm your email by clicking
               on the email link!
               </div>';
+          } else {
+            echo '<a href="./hospital_form.php"><button type="submit" class="button button-block" name="hospital_convert" />Convert OpenMRS Data</button></a>';
+            
           }
-          
+
           ?>
-          
-          <h2><?php echo $first_name.' '.$last_name; ?></h2>
-          <p><?= $email ?></p>
-          
+          <br />
           <a href="logout.php"><button class="button button-block" name="logout"/>Log Out</button></a>
 
     </div>

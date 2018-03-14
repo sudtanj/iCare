@@ -1,0 +1,23 @@
+{
+    "name": "bocharsky-bw/arrayzy",
+    "description": "A native PHP arrays easy manipulation library in OOP way.",
+    "keywords": ["arrayzy", "array", "manipulation", "oop", "utility", "helper", "wrapper"],
+    "homepage": "https://github.com/bocharsky-bw/Arrayzy",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bocharsky Victor",
+            "email": "bocharsky.bw@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.5|^5.0"
+    },
+    "autoload": {
+        "psr-4": {"Arrayzy\\": "src/"}
+    }
+}

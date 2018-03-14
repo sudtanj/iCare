@@ -1,11 +1,97 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ff45ece201cde0d8c7b8eab1269e5d83",
+    "content-hash": "73e665985751b50c952ee0577890168a",
     "packages": [
+        {
+            "name": "bocharsky-bw/arrayzy",
+            "version": "v0.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bocharsky-bw/Arrayzy.git",
+                "reference": "2df9806a5c2383fd74992b95ec06a765da9262fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bocharsky-bw/Arrayzy/zipball/2df9806a5c2383fd74992b95ec06a765da9262fd",
+                "reference": "2df9806a5c2383fd74992b95ec06a765da9262fd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5|^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Arrayzy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bocharsky Victor",
+                    "email": "bocharsky.bw@gmail.com"
+                }
+            ],
+            "description": "A native PHP arrays easy manipulation library in OOP way.",
+            "homepage": "https://github.com/bocharsky-bw/Arrayzy",
+            "keywords": [
+                "OOP",
+                "array",
+                "arrayzy",
+                "helper",
+                "manipulation",
+                "utility",
+                "wrapper"
+            ],
+            "time": "2016-07-20T17:49:22+00:00"
+        },
+        {
+            "name": "noetix/simple-orm",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/noetix/Simple-ORM.git",
+                "reference": "708a63d7e44e9ed8b18c537c7d46b968e7bd2697"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/noetix/Simple-ORM/zipball/708a63d7e44e9ed8b18c537c7d46b968e7bd2697",
+                "reference": "708a63d7e44e9ed8b18c537c7d46b968e7bd2697",
+                "shasum": ""
+            },
+            "type": "library",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Joyce",
+                    "email": "im@alex-joyce.com"
+                }
+            ],
+            "description": "A simple PHP class to access your MySQL records.",
+            "keywords": [
+                "database",
+                "mysql",
+                "orm"
+            ],
+            "support": {
+                "source": "https://github.com/noetix/Simple-ORM/tree/master",
+                "issues": "https://github.com/noetix/Simple-ORM/issues"
+            },
+            "time": "2016-12-11T03:41:19+00:00"
+        },
         {
             "name": "phpmailer/phpmailer",
             "version": "v6.0.3",
@@ -70,14 +156,17 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2018-01-05 13:19:58"
+            "time": "2018-01-05T13:19:58+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "noetix/simple-orm": 20
+    },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }

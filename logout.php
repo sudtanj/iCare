@@ -4,13 +4,9 @@ session_start();
 session_unset();
 session_destroy(); 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Error</title>
-  <?php include 'css/css.html'; ?>
-</head>
+<?php
+include 'head.php'
+?>
 
 <body>
     <div class="form">

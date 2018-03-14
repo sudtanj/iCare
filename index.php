@@ -3,12 +3,9 @@
 require 'db.php';
 session_start();
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Sign-Up/Login Form</title>
-  <?php include 'css/css.html'; ?>
-</head>
+<?php
+include 'head.php'
+?>
 
 <?php 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
@@ -107,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
       </div><!-- tab-content -->
       
 </div> <!-- /form -->
-  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <script src='https://code.jquery.com/jquery-latest.min.js'></script>
 
     <script src="js/index.js"></script>
 
