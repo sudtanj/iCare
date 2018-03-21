@@ -1,9 +1,25 @@
 <?php
-/* Displays user information and some useful messages */
-session_start();
 require '../db.php';
 require ($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 use Arrayzy\ArrayImitator as A;
+
+/* Displays user information and some useful messages */
+session_start();
+
+// Check if user is logged in using the session variable
+if ( $_SESSION['logged_in'] != 1 ) {
+  $_SESSION['message'] = "You must log in before viewing your profile page!";
+  header("location: error.php");    
+}
+else {
+    // Makes it easier to read
+    $first_name = $_SESSION['first_name'];
+    $last_name = $_SESSION['last_name'];
+    $email = $_SESSION['email'];
+    $active = $_SESSION['active'];
+    echo $email;
+}
+
 
 $findUserId=$_POST["OpenMRSId"];
 
@@ -40,15 +56,23 @@ foreach($data[0] as $value){
    //}
     
 }
-echo $findUserId,"<br />";
+//echo $findUserId,"<br />";
+echo "List of imported log: ", "<br />";
 for($i=0;$i<sizeof($useridlog);$i++){
     //echo $useridlog[$i],"<br />";
     //echo strpos($useridlog[$i],$findUserId),"<br />";
     if(strpos($useridlog[$i],$findUserId)!== false){
         echo $visitlog[$i], " <br />";
-        $mysql = "INSERT INTO healthdata (emailkey,log) VALUES ('".+$_SESSION['email']."','".$visitlog[$i]."')";
+       $mysql = "INSERT INTO healthdata (emailkey,log) VALUES ('";
+        $mysql .= $email;
+        $mysql .= "','";
+        $mysql .=$visitlog[$i];
+        $mysql .="')";
         $mysqli->query($mysql) or die(mysql_error());
     }
 }
+
+echo "Imported successfully! redirecting you to profile pages";
+echo '<meta http-equiv="refresh" content="5;url=../profile.php" />';
 //echo $data;
 //echo array_search("http://demo.openmrs.org/openmrs/ws/rest/v1/visit/",$json);

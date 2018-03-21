@@ -13,7 +13,7 @@ else {
     $last_name = $_SESSION['last_name'];
     $email = $_SESSION['email'];
     $active = $_SESSION['active'];
-    echo $_SESSION['first_name'];
+    //echo $_SESSION['first_name'];
 }
 ?>
 <?php
