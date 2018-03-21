@@ -22,7 +22,7 @@ include 'head.php'
 <body>
     <div class="form">
         <?php
-            $hospitalForm=new Form("OpenMRS Converter","This form is use for bridge between our compability layer with OpenMRS application","index.php");
+            $hospitalForm=new Form("OpenMRS Converter","This form is use for bridge between our compability layer with OpenMRS application","./object/HospitalBridge.php");
             $hospitalForm->addForm("OpenMRS Id");
             echo '<center>';
             $hospitalForm->renderTitle();
