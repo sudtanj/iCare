@@ -1,5 +1,6 @@
 <?php
 /* Displays user information and some useful messages */
+require './db.php';
 session_start();
 
 // Check if user is logged in using the session variable
@@ -40,7 +41,22 @@ include 'head.php'
           </p>
           <h2><?php echo $first_name.' '.$last_name; ?></h2>
           <p><?= $email ?></p>
-          <p>Please select what you want to do below: </p>
+          <p><strong>Your current health log :</strong></p>
+          <?php
+          $sql="SELECT log FROM healthdata WHERE emailkey='".$email."'";
+          //echo $sql;
+          $result=$mysqli->query($sql) or die(mysql_error());
+          //echo $result->num_rows;
+          if ($result->num_rows>0){
+            while ($row = $result->fetch_assoc())
+            {
+              echo "<p>";
+              echo $row['log'];
+              echo "</p>";
+            }
+          }
+          ?>
+          <p><strong>Please select what you want to do below: </strong></p>
           <?php
           
           // Keep reminding the user this account is not active, until they activate
@@ -52,7 +68,7 @@ include 'head.php'
               </div>';
           } else {
             echo '<a href="./hospital_form.php"><button type="submit" class="button button-block" name="hospital_convert" />Convert OpenMRS Data</button></a>';
-            
+            echo '<a href="./phr_nil_form.php"><button type="submit" class="button button-block" name="hospital_convert" />Convert NLM PHR</button></a>';
           }
 
           ?>

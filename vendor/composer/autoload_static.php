@@ -28,11 +28,22 @@ class ComposerStaticInitb05c62811b6c1005398ed2f19ca399bd
         ),
     );
 
+    public static $classMap = array (
+        'OLERead' => __DIR__ . '/..' . '/nuovo/spreadsheet-reader/php-excel-reader/excel_reader2.php',
+        'SpreadsheetReader' => __DIR__ . '/..' . '/nuovo/spreadsheet-reader/SpreadsheetReader.php',
+        'SpreadsheetReader_CSV' => __DIR__ . '/..' . '/nuovo/spreadsheet-reader/SpreadsheetReader_CSV.php',
+        'SpreadsheetReader_ODS' => __DIR__ . '/..' . '/nuovo/spreadsheet-reader/SpreadsheetReader_ODS.php',
+        'SpreadsheetReader_XLS' => __DIR__ . '/..' . '/nuovo/spreadsheet-reader/SpreadsheetReader_XLS.php',
+        'SpreadsheetReader_XLSX' => __DIR__ . '/..' . '/nuovo/spreadsheet-reader/SpreadsheetReader_XLSX.php',
+        'Spreadsheet_Excel_Reader' => __DIR__ . '/..' . '/nuovo/spreadsheet-reader/php-excel-reader/excel_reader2.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb05c62811b6c1005398ed2f19ca399bd::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb05c62811b6c1005398ed2f19ca399bd::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb05c62811b6c1005398ed2f19ca399bd::$classMap;
 
         }, null, ClassLoader::class);
     }

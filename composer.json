@@ -3,6 +3,10 @@
         {
             "type": "vcs",
             "url": "http://github.com/noetix/Simple-ORM.git"
+        },
+        {
+            "type": "vcs",
+            "url": "http://github.com/nuovo/spreadsheet-reader.git"
         }
     ],
     "require": {
