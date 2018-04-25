@@ -1,4 +1,4 @@
-# PHR_EHR_Bridging
+# iCare
 
 ## Getting Started
 
