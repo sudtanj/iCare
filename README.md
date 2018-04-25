@@ -62,6 +62,90 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 ```
 
+Since we’re including login.php and register.php form at the same page, the inclusion of db.php and session_start() will also apply to any page which is being included from index.php, in this case login.php and register.php, so we won’t have to repeat database inclusion and session start function on either pages.
+
+register.php
+```php
+$_SESSION['email'] = $_POST['email'];
+$_SESSION['first_name'] = $_POST['firstname'];
+$_SESSION['last_name'] = $_POST['lastname'];
+
+
+$first_name = $mysqli->escape_string($_POST['firstname']);
+$last_name = $mysqli->escape_string($_POST['lastname']);
+$email = $mysqli->escape_string($_POST['email']);
+$password = $mysqli->escape_string( password_hash($_POST['password'], PASSWORD_BCRYPT) );
+
+
+$hash = $mysqli->escape_string( md5( rand(0,1000) ) );
+
+
+// Check if user with that email already exists
+$result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error);
+
+
+// We know user email exists if the rows returned are more than 0
+if ( $result->num_rows > 0 ) {
+   $_SESSION['message'] = 'User with this email already exists!';
+   header("location: error.php");
+}
+else { // Email doesn't already exist in a database, proceed...
+
+
+   // active is 0 by DEFAULT (no need to include it here)
+   $sql = "INSERT INTO users (first_name, last_name, email, password, hash) " 
+         . "VALUES ('$first_name','$last_name','$email','$password', '$hash')";
+
+
+   // Add user to the database
+   if ( $mysqli->query($sql) ){
+      $_SESSION['active'] = 0; //0 until user activates their account with verify.php
+      $_SESSION['logged_in'] = true; // So we know the user has logged in
+      $_SESSION['message'] =
+            "Confirmation link has been sent to $email, please verify
+
+
+            your account by clicking on the link in the message!";
+      // Send registration confirmation link (verify.php)
+      $to      = $email;
+      $subject = 'Account Verification ( clevertechie.com )';
+      $message_body = '
+      Hello '.$first_name.',
+      Thank you for signing up!
+      Please click this link to activate your account:
+      http://localhost/login-system/verify.php?email='.$email.'&hash='.$hash;  
+      mail( $to, $subject, $message_body );
+      header("location: profile.php"); 
+   }
+
+   else {
+      $_SESSION['message'] = 'Registration failed!';
+      header("location: error.php");
+   }
+}
+```
+We set some session variables which will be used to welcome the user on the profile.php which is where register.php will redirect on a successful register.
+
+### SQL
+SQL code is used to create the database and user accounts which included in a folder “sql”. Add following code to create the database
+
+```mysql
+
+CREATE DATABASE accounts;
+CREATE TABLE `accounts`.`users` 
+(
+   `id` INT NOT NULL AUTO_INCREMENT,
+   `first_name` VARCHAR(50) NOT NULL,
+   `last_name` VARCHAR(50) NOT NULL,
+   `email` VARCHAR(100) NOT NULL,
+   `password` VARCHAR(100) NOT NULL,
+   `hash` VARCHAR(32) NOT NULL,
+   `active` BOOL NOT NULL DEFAULT 0,
+PRIMARY KEY (`id`) 
+);
+
+```
+
 ## Convert OpenMRS
 
 ### Input
