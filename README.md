@@ -24,6 +24,44 @@ The main scenario in the use of this application is the scenario where the patie
   2. noetix/simple-orm dev-master
   3. bocharsky-bw/arrayzy 0.6.1
 ## Login System
+PHP files are colored with yellow color. Mailed PHP files are in blue color. All green color indicates display messages, grey color are the most important action in PHP. Meanwhile, form action file which is being called other than the file itself is in red.
+
+There are three actions where a user can take on index.php page, there are:
+- login.php page : this action will lead user to do login to access their profile or account
+- register.php page : this action will lead user to do registration by fill their first name and last name in required field, signing up their email address and set a password.
+- forgot.php page : 
+
+In error.php file, the only thing that prints out the message from the $_SESSION[‘message’] variable, which will be set on the previous page. So, we need to start the session by calling “session_start()” function so we have access to $_SESSION global variable. We need to make sure that the variable is set with “isset()” and not empty “!empty()” functions before attempting to print it out. If the variable is not set, we redirect the user back to the “index.php” page with header() function. Below are the code for error.php
+
+Inside the index.php file, we check if the form is being submitted with method=”post” by making sure the request_method of $_SERVER variable is equal to POST. we then check if the $_POST[‘login’] is set which is a variable of the login form, in that case we proceed to login.php by including the code with “require” keyword. Else if $_POST[‘register’] variable is set, which is a variable of the register form
+
+```php
+
+<?php 
+/* Main page with two forms: sign up and log in */
+require 'db.php';
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Sign-Up/Login Form</title>
+ <?php include 'css/css.html'; ?>
+</head>
+<?php 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+{
+   if (isset($_POST['login'])) { //user logging in
+      require 'login.php';
+   }
+   elseif (isset($_POST['register'])) { //user registering
+         require 'register.php';
+   }
+}
+?>
+
+```
+
 ## Convert OpenMRS
 
 ### Input
