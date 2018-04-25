@@ -232,6 +232,135 @@ From a piece of code in index.php above, we check if the form is being submitted
 
 Since we including the login.php and register.php in index.php, the inclusion of db.php and session_start will also apply to any page which is being included from index.php. Login.php and register.php won’t have to repeat database inclusion and session start function on either pages.
 
+```php
+<?php
+/* Registration process, inserts user info into the database 
+   and sends account confirmation email message
+ */
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require_once 'vendor/autoload.php';
+// Set session variables to be used on profile.php page
+$_SESSION['email'] = $_POST['email'];
+$_SESSION['first_name'] = $_POST['firstname'];
+$_SESSION['last_name'] = $_POST['lastname'];
+// Escape all $_POST variables to protect against SQL injections
+$first_name = $mysqli->escape_string($_POST['firstname']);
+$last_name = $mysqli->escape_string($_POST['lastname']);
+$email = $mysqli->escape_string($_POST['email']);
+$password = $mysqli->escape_string(password_hash($_POST['password'], PASSWORD_BCRYPT));
+$hash = $mysqli->escape_string( md5( rand(0,1000) ) );     
+// Check if user with that email already exists
+$result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+// We know user email exists if the rows returned are more than 0
+if ( $result->num_rows > 0 ) {    
+    $_SESSION['message'] = 'User with this email already exists!';
+    header("location: error.php");    
+}
+else { // Email doesn't already exist in a database, proceed...
+    // active is 0 by DEFAULT (no need to include it here)
+    $sql = "INSERT INTO users (first_name, last_name, email, password, hash) " 
+            . "VALUES ('$first_name','$last_name','$email','$password', '$hash')";
+    // Add user to the database
+    if ( $mysqli->query($sql) ){
+        $_SESSION['active'] = 0; //0 until user activates their account with verify.php
+        $_SESSION['logged_in'] = true; // So we know the user has logged in
+        $_SESSION['message'] =                
+                 "Confirmation link has been sent to $email, please verify
+                 your account by clicking on the link in the message!";
+        // Send registration confirmation link (verify.php)
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.googlemail.com';  //gmail SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'tifuphmedic2015@gmail.com';   //username
+        $mail->Password = 'informatics2015';   //password
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;                    //SMTP port
+        $mail->setFrom('tifuphmedic2015@gmail.com', 'donotreply-ihealth');
+        $mail->addAddress($email, $first_name);
+       // $to      = $email;
+        $mail->Subject = 'Account Verification ( iCare )'; // ( clevertechie.com)
+        $mail->Body = '
+        Hello '.$first_name.',
+        Thank you for signing up!
+        Please click this link to activate your account:
+        http://'.$_SERVER['HTTP_HOST'].'/verify.php?email='.$email.'&hash='.$hash;  
+        //mail( $to, $subject, $message_body );
+        $mail->send();    
+        header("location: profile.php"); 
+    }
+    else {
+        $_SESSION['message'] = 'Registration failed!';
+        header("location: error.php");
+    }
+}
+```
+In register.php, we set some session variables which will be used to welcome the user on the profile.php will redirect on a successful register. Then prepare all the $_POST variables by applying $mysqli->escape_string() function to protect again SQL injections.
+```php
+$password = $mysqli->escape_string( password_hash($_POST['password'], PASSWORD_BCRYPT) );
+$hash = $mysqli->escape_string( md5( rand(0,1000) ) );
+```
+The code above create secure password hash and generate a unique hash string. For the $password, it has used the built-in PHP function password_hash() which takes in two parameters, the first is the raw password provided by the user and the second is the encryption algorithm constant -- in this case, PASSWORD_BCRYPT.
+
+To generate unique hash string,we simply use the rand() function which will generate a random number from 0 to 100, and then we use md5() function to generate a unique hash from the random number.
+
+We then check, if the user with the entered email already exist in the database before proceeding, if they do, we redirect to error.php page. If you recall, whenever we run "SELECT" statement in a PHP SQL query, we get the result object returned, so it makes sense to call the variable $result. Here is what the object would look like if we used var_dump() function on it:
+
+```php
+var_dump( $result );
+//output: object(mysqli_result)#2 (5) { ["current_field"]=> int(0) ["field_count"]=> int(7) ["lengths"]=> NULL ["num_rows"]=> int(0) ["type"]=> int(0) }
+```
+
+there is "num_rows" property, which would be equal to 1 if the user with the email already existed in the database, that's how we find out if the user exists by running the following if statement:
+
+```php
+// We know user email exists if the rows returned are more than 0
+if ( $result->num_rows > 0 ) {
+   $_SESSION['message'] = 'User with this email already exists!';
+   header("location: error.php");
+}
+```
+
+Else...if the user doesn't exist, we proceed by first preparing the SQL insert statement with all our previously set variables:
+```php
+// active is 0 by DEFAULT (no need to include it here)
+   $sql = "INSERT INTO users (first_name, last_name, email, password, hash) " 
+         . "VALUES ('$first_name','$last_name','$email','$password', '$hash')";
+
+```
+We then check if the mysql->query() is successful, if it is, we know the user has been added to the database. Next we set some session variables to be used on the profile.php page
+
+```php
+     $_SESSION['active'] = 0; //0 until user activates their account with verify.php
+      $_SESSION['logged_in'] = true; // So we know the user has logged in
+      $_SESSION['message'] =     
+            "Confirmation link has been sent to $email, please verify
+            your account by clicking on the link in the message!";
+```
+
+We know the account won't be activated when a user first registers, so we can safely set $_SESSION['active'] to zero. We set the session logged_in to true, so we know the user has logged in and finally the message to display that the account activation link has been sent.
+The final step, is to send the user an email with the account activation link:
+
+```php
+   // Send registration confirmation link (verify.php)
+      $to       $email;
+      $subject = 'Account Verification ( clevertechie.com )';
+      $message_body = '
+      Hello '.$first_name.',
+      Thank you for signing up!
+      Please click this link to activate your account:
+      http://localhost/login-system/verify.php?email='.$email.'&hash='.$hash;  
+      mail( $to, $subject, $message_body );
+      //redirect to profile.php page
+      header("location: profile.php");
+```
+
+The PHP mail() function takes in three parameters - $to (user email where to send the message), $subject (email subject) and $message_body (the main body of the email message).
+The most important part of the verification message if the following URL which sends a user to verify.php with email and hash variables: http://localhost/login-system/verify.php?email='.$email.'&hash='.$hash;
+By passing email=$email&hash=$hash variables in this way, we'll be able to access them from verify.php from the $_GET global PHP varible and match the user email with their unique hash, so we can verify their account. 
+
 
 
 ## Convert OpenMRS
