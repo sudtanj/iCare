@@ -1,4 +1,15 @@
 # iCare
+iCare is a compability layer that stand between PHR (NLM PHR) and EHR (OpenMRS) data conversion
+
+## Project Member
+| No | Profile Picture | Member Name | Github Userid | Student Id Number | Role |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| 1. | <img src="https://avatars.githubusercontent.com/alvincallysta11" width=100 height=100 /> | Alvin Callysta | <a title="@alvincallysta11" href="https://github.com/alvincallysta11">@alvincallysta11</a> | 0000012551 | Product Owner |
+| 2. | <img src="https://avatars.githubusercontent.com/cikadesela" width=100 height=100/> | Cika Desela | <a title="@cikadesela" href="https://github.com/cikadesela">@cikadesela</a> |   0000011818 | Sprinter |
+| 3. | <img src="https://avatars.githubusercontent.com/feroniameimei" width=100 height=100/> | Feronia Meilinda | <a title="@feroniameimei" href="https://github.com/feroniameimei">@feroniameimei</a> |   00000012566 | Sprinter |
+| 4. | <img src="https://avatars.githubusercontent.com/octawijayaa" width=100 height=100/> | Octa Wahana Widiwijaya | <a title="@octawijayaa" href="https://github.com/octawijayaa">@octawijayaa</a> |           0000019399 | Sprinter |
+| 5. | <img src="https://avatars.githubusercontent.com/sudtanj" width=100 height=100/> | Sudono Tanjung | <a title="@sudtanj" href="https://github.com/sudtanj">@sudtanj</a> |              				 00000012273 | Scrum Master | 
+
 
 ## Getting Started
 
