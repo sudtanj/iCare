@@ -145,6 +145,94 @@ PRIMARY KEY (`id`)
 );
 
 ```
+File sql_import.php is included, which is a PHP script to execute the above SQL code. Make sure to set your own $user and $password variables to connect to MySQL Database
+```php
+//connection variables
+$host = 'localhost';
+$user = '';
+$password = '';
+//create mysql connection
+
+
+$mysqli = new mysqli($host,$user,$password);
+if ($mysqli->connect_errno) {
+   printf("Connection failed: %s\n", $mysqli->connect_error);
+   die();
+}
+//create the database
+if ( !$mysqli->query('CREATE DATABASE accounts') ) {
+   printf("Errormessage: %s\n", $mysqli->error);
+}
+//create users table with all the fields
+$mysqli->query('
+CREATE TABLE `accounts`.`users` 
+(
+   `id` INT NOT NULL AUTO_INCREMENT,
+   `first_name` VARCHAR(50) NOT NULL,
+   `last_name` VARCHAR(50) NOT NULL,
+   `email` VARCHAR(100) NOT NULL,
+   `password` VARCHAR(100) NOT NULL,
+   `hash` VARCHAR(32) NOT NULL,
+   `active` BOOL NOT NULL DEFAULT 0,
+PRIMARY KEY (`id`) 
+);') or die($mysqli->error);
+
+```
+
+The db.php file, using PHP “require” construct on most pages, it will simply connects to the ‘accounts’ MySQL database.
+
+The file error.php and success.php are simply for displaying success and error messages respectively.
+
+```php
+<?php
+/* Displays all error messages */
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Error</title>
+ <?php include 'css/css.html'; ?>
+</head>
+<body>
+<div class="form">
+   <h1>Error</h1>
+   <p>
+  <?php 
+   if( isset($_SESSION['message']) AND !empty($_SESSION['message']) ): 
+      echo $_SESSION['message'];    
+   else:
+      header( "location: index.php" );
+   endif;
+   ?>
+   </p>     
+   <a href="index.php"><button class="button button-block"/>Home</button></a>
+</div>
+</body>
+</html>
+
+```
+In error.php, it prints out the message from the $_SESSION[‘message’] variable, which will be set on the previous page. First, we need to start the session by calling “session_start()” function so we have access to $_SESSION global variable. Then, we need to make sure that the variable is set with “isset()” and not empty “!empty()” functions before attempting to print it out. If the variable is not set, we redirect the user back to the “index.php” page.
+
+The success.php contains exactly the same code with exception of different title and header.
+```php
+<?php 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+{
+   if (isset($_POST['login'])) { //user logging in
+      require 'login.php';      
+   }   
+   elseif (isset($_POST['register'])) { //user registering     
+      require 'register.php';
+   }
+}
+?>
+```
+From a piece of code in index.php above, we check if the form is being submitted with method=”post” by making sure the request_method of $_SERVER variable is equal to POST. then check if the $_POST[‘login’] is set which is a variable of the login form, in that case we proceed to login.php by including the code with “require” keyword. Else if $_POST[‘register’] variable is set, which is a variable of the register form, we proceed to register.php by including it’s code.
+
+Since we including the login.php and register.php in index.php, the inclusion of db.php and session_start will also apply to any page which is being included from index.php. Login.php and register.php won’t have to repeat database inclusion and session start function on either pages.
+
+
 
 ## Convert OpenMRS
 
