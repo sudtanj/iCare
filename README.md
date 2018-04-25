@@ -47,3 +47,24 @@ The main scenario in the use of this application is the scenario where the patie
 3. iCare will display the new result it got from the updated database.
 
 ## Convert NLM PHR
+Interface of NLM Data Importer
+
+**Diagram**
+
+**Input**
+
+1. Export the health data from NLM PHR export button
+2. Save the file result to the client local hard drive
+3. Upload the data to the NLM Data Import by clicking the choose file
+4. Click parse to continue
+
+**Process**
+
+1. iCare app will unpack the uploaded data
+2. It will parse the data and search for the health log
+3. It will import all the health log info to the iCare central database
+
+**Output**
+
+1. iCare will output a success importing message
+2. iCare will redirect back user to the main page which show the user profile and health log collection
