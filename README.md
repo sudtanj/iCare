@@ -24,4 +24,26 @@ The main scenario in the use of this application is the scenario where the patie
   2. noetix/simple-orm dev-master
   3. bocharsky-bw/arrayzy 0.6.1
 ## Login System
+## Convert OpenMRS
 
+### Input
+
+1. OpenMRS Converter required the OpenMRS user id to begin importing the health data log
+
+### Process
+
+1. OpenMRS Converter call the api from the link [http://demo.openmrs.org/openmrs/ws/rest/v1/visit](http://demo.openmrs.org/openmrs/ws/rest/v1/visit) to access the data available via json format.
+2. OpenMRS Converter will fetch all the health data and get all the log information with the specified id
+3. OpenMRS Converter will insert all the data found in the api result to the iCare database and linked it with the user id that logged in at iCare.
+
+#### MySQL Query
+
+        INSERT INTO healthdata (emailkey,log) VALUES ($email,$visitlog[$i]);
+
+### Output
+
+1. OpenMRS Converter will output a success message whether it got any data or not.
+2. OpenMRS Converter will redirect user out from the module to the main page
+3. iCare will display the new result it got from the updated database.
+
+## Convert NLM PHR
